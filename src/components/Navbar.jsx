@@ -3,7 +3,7 @@ import Searchbar from "./Searchbar";
 
 function Navbar() {
   return (
-    <nav style={{ backgroundColor: "#d2efdbff", padding: "12px 5%" }}>
+    <nav style={{ backgroundColor: "#d2efdbff", padding: "18px 5%" }}>
       <div
         style={{
           maxWidth: "1200px",
@@ -30,8 +30,7 @@ function Navbar() {
         </a>
         {/* Searchbar */}
         <Searchbar />
-
-
+        
         {/* Nav Links */}
         <div style={{ 
           display: "flex", 

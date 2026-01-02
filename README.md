@@ -1,71 +1,243 @@
-# Getting Started with Create React App
+# Grey Scientific Labs
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Purpose
 
-## Available Scripts
+This project was developed exclusively as part of the assessment provided by Grey Scientific Labs. It has been carefully prepared to meet the evaluation criteria mentioned in the assessment email.
 
-In the project directory, you can run:
+Special emphasis has been placed on responsive design, ensuring a seamless user experience across desktop, laptop, and mobile devices, as responsiveness was a key requirement for qualifying for the interview process.
 
-### `npm start`
+## Table of Contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Screenshots](#screenshots)
+- [Setup Instructions](#setup-instructions)
+  - [Prerequisites](#prerequisites)
+  - [Supabase Setup](#supabase-setup)
+  - [Server Setup](#server-setup)
+  - [Client Setup](#client-setup)
+- [API Endpoints](#api-endpoints)
+- [Dependencies](#dependencies)
+- [Image Sources](#image-sources)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+### Core Features
+1. **User Management**: Signup/login with JWT, user profiles with basic info (name, email, registration date), access control for logged-in users only.
+2. **Event Management**: CRUD operations for events (create, edit, delete own events), view all events, event details include title, description, date, time, location.
+3. **Join/Leave Events (RSVP System)**: Users can join/leave events once, attendee lists displayed, unique RSVP constraint.
+4. **Frontend Functionality**: All required pages (Login/Signup, Events List, Event Details, Create/Edit Event), React Router navigation, error/success messages.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Best Practices 
+- Functional components and hooks
+- Modular design and clean code
+- Responsive design
+- Error handling with user feedback
+- Comments for complex logic
 
-### `npm run build`
+### Extra Features
+1. **Profile Page with Created Events**: Displays user's events with attendee details and CSV export functionality.
+2. **Image Slider**: Auto-swapping images on Events List page using react-slick.
+3. **About Us Page**: Additional informational page.
+4. **Contact Us Page**: Additional contact page.
+5. **Navbar Conditional Rendering**: Dynamic navigation based on login status.
+6. **Event Attendee Popup**: Detailed attendee list in Profile with export to CSV.
+7. **Responsive Grid Layout**: Events displayed in responsive grid.
+8. **Logout Functionality**: Proper token removal and navigation.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Tech Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | React, React Router, Axios, Tailwind CSS |
+| **Backend** | Node.js, Express.js, JWT, bcryptjs |
+| **Database** | PostgreSQL (Supabase) |
+| **Other** | CORS, dotenv |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Project Structure
 
-### `npm run eject`
+## Screenshots
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Homepage Before Login
+![Homepage](screenshots/Homepage.png)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Signup Page
+![Signup Page](screenshots/Signuppage.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Signin Page
+![Signin Page](screenshots/Signpage.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Homepage After Login
+![Homepage After Login](screenshots/HomepageAfterlogin.png)
 
-## Learn More
+### Create Event Page
+![Create Event Page](screenshots/Createeventpage.png)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Event Page
+![Event Page](screenshots/Eventpage.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Profile Page
+![Profile Page](screenshots/Profilepage.png)
 
-### Code Splitting
+## Setup Instructions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Prerequisites
 
-### Analyzing the Bundle Size
+- Node.js (v14 or higher)
+- npm or yarn
+- A Supabase account (free tier is sufficient)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Supabase Setup
 
-### Making a Progressive Web App
+1. **Create a Supabase Account**:
+   - Go to [Supabase](https://supabase.com/) and sign up for a free account
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+2. **Create a New Project**:
+   - Click "New Project"
+   - Fill in project name (e.g., "event-scheduling")
+   - Set a database password and remember it
+   - Wait for the project to be created (may take a few minutes)
 
-### Advanced Configuration
+3. **Get Connection Details**:
+   - Go to Project Settings → Database
+   - Find the "Connection string" section
+   - Copy the PostgreSQL connection string (starts with `postgres://`)
+   - It will look like:
+     ```
+     postgres://postgres:password@host:5432/postgres
+     ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+4. **Set Up Database Tables**:
+   - Go to the SQL Editor in Supabase dashboard
+   - Copy the contents of `server/database.sql`
+   - Run the SQL script to create the necessary tables
 
-### Deployment
+### Server Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1. Navigate to the server directory:
+   ```bash
+   cd server
+   ```
 
-### `npm run build` fails to minify
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# productsView
+3. Configure environment variables:
+   - Create a `.env` file in the server directory with the following variables:
+     ```
+     PORT=5001
+     DATABASE_URL=your_supabase_connection_string_here
+     JWT_SECRET=your_jwt_secret_key_here
+     ```
+   - Example `DATABASE_URL`:
+     ```
+     DATABASE_URL=postgres://postgres:yourpassword@db.projectid.supabase.co:5432/postgres
+     ```
+   - Replace `your_supabase_connection_string_here` with your actual Supabase connection string
+   - Replace `your_jwt_secret_key_here` with a secure random string
+   - The `.env` file should be placed in the root of the `server` directory and should not be committed to version control (ensure it's in `.gitignore`)
+
+4. Start the server:
+   ```bash
+   npm run dev
+   ```
+
+The server will run on `http://localhost:5001`
+
+### Client Setup
+
+1. Navigate to the client directory:
+   ```bash
+   cd client
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configure environment variables:
+   - Create a `.env` file in the client directory with the following variable:
+     ```
+     REACT_APP_API_URL=http://localhost:5001
+     ```
+   - This sets the API base URL for the React app to communicate with the backend server
+   - The `.env` file should be placed in the root of the `client` directory and should not be committed to version control (ensure it's in `.gitignore`)
+
+4. Start the development server:
+   ```bash
+   npm start
+   ```
+
+The application will be available at `http://localhost:3000`
+
+## API Endpoints
+
+### Authentication Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/signup` | User registration (requires: name, email, password) |
+| POST | `/api/auth/login` | User login (requires: email, password) |
+
+### Event Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/events` | Get all events (public) |
+| GET | `/api/events/:id` | Get single event details with attendees (public) |
+| GET | `/api/events/:id/attendees` | Get attendees for a specific event (public) |
+| POST | `/api/events` | Create new event (authenticated, requires: title, description, date, time, location) |
+| PUT | `/api/events/:id` | Update event (authenticated, creator only, requires: title, description, date, time, location) |
+| DELETE | `/api/events/:id` | Delete event (authenticated, creator only) |
+| POST | `/api/events/:id/join` | Join event (authenticated) |
+| POST | `/api/events/:id/leave` | Leave event (authenticated) |
+| GET | `/api/events/created` | Get events created by the logged-in user with attendees (authenticated) |
+| PUT | `/api/events/created/:id` | Update event from profile (authenticated, creator only) |
+| DELETE | `/api/events/created/:id` | Delete event from profile (authenticated, creator only) |
+
+## Dependencies
+
+### Client Dependencies
+
+| Package | Purpose |
+|---------|---------|
+| react | Core React library for building the user interface |
+| react-dom | React DOM rendering library |
+| react-router-dom | Declarative routing for React applications |
+| axios | HTTP client for making API requests |
+| react-slick | Carousel/slider component for auto-swapping images |
+| tailwindcss | Utility-first CSS framework for styling |
+| web-vitals | Library for measuring web performance metrics |
+
+### Server Dependencies
+
+| Package | Purpose |
+|---------|---------|
+| express | Web framework for Node.js |
+| pg | PostgreSQL client for Node.js |
+| jsonwebtoken | Implementation of JSON Web Tokens for authentication |
+| bcryptjs | Library for hashing passwords |
+| cors | Middleware for enabling Cross-Origin Resource Sharing |
+| dotenv | Module for loading environment variables from a .env file |
+
+### Dev Dependencies
+
+| Package | Purpose |
+|---------|---------|
+| nodemon (server) | Tool for automatically restarting the server during development |
+| autoprefixer (client) | PostCSS plugin for adding vendor prefixes |
+| postcss (client) | Tool for transforming CSS with JavaScript |
+
+## Image Sources
+
+All images used in the project are sourced from [Pixabay](https://pixabay.com/), a free stock photo website. The images are located in `client/src/assets/images/` and include:
+- pic1.jpg
+- pic2.jpg
+- pic3.jpg
+- pic4.jpg
+
+

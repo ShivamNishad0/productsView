@@ -1,2 +1,29 @@
 /* App.css */
 
+.secondary-btn {
+  padding: 12px 32px;
+  background-color: white;
+  color: #166534;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 2px solid #166534;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.secondary-btn:hover {
+  background-color: #14532d;
+  color: white;
+}
+
+.primary-btn {
+  padding: 12px 32px;
+  background-color: #166534;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.primary-btn:hover {
+  background-color: #14532d;
+}
