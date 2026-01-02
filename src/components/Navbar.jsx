@@ -1,8 +1,9 @@
 import logo from "../assets/logo.png";
+import Searchbar from "./Searchbar";
 
 function Navbar() {
   return (
-    <nav style={{ backgroundColor: "#d2efdbff", padding: "12px 24px" }}>
+    <nav style={{ backgroundColor: "#d2efdbff", padding: "12px 5%" }}>
       <div
         style={{
           maxWidth: "1200px",
@@ -10,19 +11,34 @@ function Navbar() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          flexWrap: "wrap",
+          gap: "16px",
         }}
       >
         {/* Logo */}
         <a href="/" style={{ display: "flex", alignItems: "center" }}>
           <img
             src={logo}
-            alt="Product Inventory Manager Logo"
-            style={{ height: "40px", width: "auto" }}
+            alt="Product Logo"
+            style={{ 
+              height: "40px", 
+              maxWidth: "200px",
+              width: "auto", 
+              objectFit: "contain" 
+            }}
           />
         </a>
+        {/* Searchbar */}
+        <Searchbar />
+
 
         {/* Nav Links */}
-        <div style={{ display: "flex", gap: "20px" }}>
+        <div style={{ 
+          display: "flex", 
+          gap: "20px",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}>
           <a href="/" style={linkStyle}>Home</a>
           <a href="/products" style={linkStyle}>Products</a>
           <a href="/about" style={linkStyle}>About</a>
@@ -36,6 +52,7 @@ const linkStyle = {
   color: "#166534",
   textDecoration: "none",
   fontWeight: "500",
+  whiteSpace: "nowrap",
 };
 
 export default Navbar;
