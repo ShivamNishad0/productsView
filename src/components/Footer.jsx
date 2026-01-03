@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   const socialLinks = [
-    { name: "LinkedIn", url: "https://linkedin.com", icon: FaLinkedin },
-    { name: "GitHub", url: "https://github.com", icon: FaGithub }
+    { name: "LinkedIn", url: "https://www.linkedin.com/in/sn-shivam/", icon: FaLinkedin },
+    { name: "GitHub", url: "https://github.com/ShivamNishad0", icon: FaGithub }
   ];
 
   const navLinks = [
@@ -89,7 +89,7 @@ function Footer() {
             </Link>
 
             <p style={{ color: "#166534", marginTop: 25, fontSize: 14 }}>
-              © {new Date().getFullYear()} Product Inventory Manager. All rights reserved.
+              © {new Date().getFullYear()} Grey Scientific Labs. All rights reserved.
             </p>
           </div>
 
