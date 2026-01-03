@@ -1,5 +1,4 @@
 import logo from "../assets/logo.png";
-import Searchbar from "./Searchbar";
 
 function Navbar() {
   return (
@@ -28,9 +27,7 @@ function Navbar() {
             }}
           />
         </a>
-        {/* Searchbar */}
-        <Searchbar />
-        
+
         {/* Nav Links */}
         <div style={{ 
           display: "flex", 

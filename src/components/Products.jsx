@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../styles/products.css";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -11,116 +12,202 @@ function Products() {
   });
 
   const [editId, setEditId] = useState(null);
+  const [showForm, setShowForm] = useState(false);
   const [view, setView] = useState("card");
-
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const [errors, setErrors] = useState({});
 
-  /* ------------------ Debounce Search ------------------ */
+  const itemsPerPage = 10;
+
+  /* Debounce search */
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
       setCurrentPage(1);
     }, 500);
-
     return () => clearTimeout(timer);
   }, [search]);
 
-  /* ------------------ Handlers ------------------ */
   const handleChange = (e) => {
+    // Clear error when user starts typing
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: "" });
+    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!formData.name || !formData.price || !formData.category) {
-      alert("Name, Price, Category are required");
+    
+    const newErrors = {};
+    
+    // Name validation (required)
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+    
+    // Price validation (required, number)
+    if (!formData.price.trim()) {
+      newErrors.price = "Price is required";
+    } else if (isNaN(formData.price) || Number(formData.price) <= 0) {
+      newErrors.price = "Price must be a positive number";
+    }
+    
+    // Category validation (required)
+    if (!formData.category.trim()) {
+      newErrors.category = "Category is required";
+    }
+    
+    // Stock validation (optional, but must be number if provided)
+    if (formData.stock && isNaN(formData.stock)) {
+      newErrors.stock = "Stock must be a number";
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
+    
+    setErrors({});
 
     if (editId) {
       setProducts(
-        products.map((p) =>
-          p.id === editId ? { ...formData, id: editId } : p
-        )
+        products.map((p) => (p.id === editId ? { ...formData, id: editId } : p))
       );
       setEditId(null);
     } else {
       setProducts([...products, { ...formData, id: Date.now() }]);
     }
 
-    setFormData({
-      name: "",
-      price: "",
-      category: "",
-      stock: "",
-      description: "",
-    });
+    setFormData({ name: "", price: "", category: "", stock: "", description: "" });
+    setShowForm(false);
   };
 
   const handleEdit = (product) => {
     setFormData(product);
     setEditId(product.id);
+    setShowForm(true);
   };
 
   const handleDelete = (id) => {
     setProducts(products.filter((p) => p.id !== id));
   };
 
-  /* ------------------ Filtering & Pagination ------------------ */
+  const handleCancel = () => {
+    setEditId(null);
+    setFormData({ name: "", price: "", category: "", stock: "", description: "" });
+    setShowForm(false);
+  };
+
+  /* Filter + Pagination */
   const filteredProducts = products.filter((p) =>
     p.name.toLowerCase().includes(debouncedSearch.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  const start = (currentPage - 1) * itemsPerPage;
-  const paginatedProducts = filteredProducts.slice(
-    start,
-    start + itemsPerPage
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentProducts = filteredProducts.slice(
+    startIndex,
+    startIndex + itemsPerPage
   );
 
   return (
-    <div style={styles.container}>
-      <h2>Product Inventory Manager</h2>
+    <div className="products-wrapper">
+      {/* Header */}
+      <div className="products-header">
+        <h1>Product Inventory Manager</h1>
+        <p>Manage your product catalog efficiently</p>
+      
 
-      {/* Search & Toggle */}
-      <div style={styles.topBar}>
+      {/* Top Search Bar */}
+      <div className="products-topbar">
         <input
-          placeholder="Search product..."
+          className="search-input"
+          placeholder="🔍 Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <button onClick={() => setView(view === "card" ? "list" : "card")}>
-          Switch to {view === "card" ? "List" : "Card"} View
-        </button>
+        <div className="top-actions">
+          <button className="btn primary" onClick={() => setShowForm(!showForm)}>
+            {showForm ? "Cancel" : "+ Add Product"}
+          </button>
+
+          <button className="btn secondary" onClick={() => setView(view === "card" ? "list" : "card")}>
+            {view === "card" ? "List View" : "Card View"}
+          </button>
+        </div>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input name="name" placeholder="Name *" value={formData.name} onChange={handleChange} />
-        <input name="price" type="number" placeholder="Price *" value={formData.price} onChange={handleChange} />
-        <input name="category" placeholder="Category *" value={formData.category} onChange={handleChange} />
-        <input name="stock" type="number" placeholder="Stock" value={formData.stock} onChange={handleChange} />
-        <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} />
+      {showForm && (
+        <form className="form-card" onSubmit={handleSubmit}>
+          <h3>{editId ? "Edit Product" : "Add New Product"}</h3>
 
-        <button type="submit">{editId ? "Update" : "Add"} Product</button>
-      </form>
+          <div className="form-grid">
+            <div className="form-field">
+              <input name="name" placeholder="Product Name" value={formData.name} onChange={handleChange} required />
+              {errors.name && <span className="error">{errors.name}</span>}
+            </div>
+            <div className="form-field">
+              <input name="price" placeholder="Price" type="number" value={formData.price} onChange={handleChange} required />
+              {errors.price && <span className="error">{errors.price}</span>}
+            </div>
+            <div className="form-field">
+              <input name="category" placeholder="Category" value={formData.category} onChange={handleChange} required />
+              {errors.category && <span className="error">{errors.category}</span>}
+            </div>
+            <div className="form-field">
+              <input name="stock" placeholder="Stock" type="number" value={formData.stock} onChange={handleChange} />
+              {errors.stock && <span className="error">{errors.stock}</span>}
+            </div>
+          </div>
+
+          <div className="form-field">
+            <textarea
+              name="description"
+              placeholder="Description (optional)"
+              value={formData.description}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-actions">
+            <button className="btn primary" type="submit">
+              {editId ? "Update" : "Add"}
+            </button>
+            <button className="btn secondary" type="button" onClick={handleCancel}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Empty State */}
+      {currentProducts.length === 0 && (
+        <div className="empty-state">
+          <h3>No products found</h3>
+          <p>Add products to see them here</p>
+        </div>
+      )}
 
       {/* Card View */}
       {view === "card" && (
-        <div style={styles.grid}>
-          {paginatedProducts.map((p) => (
-            <div key={p.id} style={styles.card}>
+        <div className="products-grid">
+          {currentProducts.map((p) => (
+            <div className="product-card" key={p.id}>
               <h4>{p.name}</h4>
-              <p>₹{p.price}</p>
-              <p>{p.category}</p>
-              <button onClick={() => handleEdit(p)}>Edit</button>
-              <button onClick={() => handleDelete(p.id)}>Delete</button>
+              <p className="price">₹{p.price}</p>
+              <p className="muted">{p.category}</p>
+              <p className="muted">Stock: {p.stock}</p>
+              <p>{p.description}</p>
+
+              <div className="card-actions">
+                <button className="edit" onClick={() => handleEdit(p)}>Edit</button>
+                <button className="delete" onClick={() => handleDelete(p.id)}>Delete</button>
+              </div>
             </div>
           ))}
         </div>
@@ -128,55 +215,49 @@ function Products() {
 
       {/* List View */}
       {view === "list" && (
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th>Name</th><th>Price</th><th>Category</th><th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedProducts.map((p) => (
-              <tr key={p.id}>
-                <td>{p.name}</td>
-                <td>₹{p.price}</td>
-                <td>{p.category}</td>
-                <td>
-                  <button onClick={() => handleEdit(p)}>Edit</button>
-                  <button onClick={() => handleDelete(p.id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="products-list">
+          <div className="list-header">
+            <span>Product</span>
+            <span>Price</span>
+            <span>Category</span>
+            <span>Stock</span>
+            <span>Actions</span>
+          </div>
+          {currentProducts.map((p) => (
+            <div className="list-row" key={p.id}>
+              <div className="list-name">
+                <strong>{p.name}</strong>
+                <p>{p.description}</p>
+              </div>
+              <span>₹{p.price}</span>
+              <span>{p.category}</span>
+              <span>{p.stock}</span>
+              <div className="list-actions">
+                <button className="edit" onClick={() => handleEdit(p)}>Edit</button>
+                <button className="delete" onClick={() => handleDelete(p.id)}>Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
 
       {/* Pagination */}
-      <div style={styles.pagination}>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentPage(i + 1)}
-            style={{
-              fontWeight: currentPage === i + 1 ? "bold" : "normal",
-            }}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
+      {totalPages > 1 && (
+        <div className="pagination">
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              className={currentPage === i + 1 ? "active" : ""}
+              onClick={() => setCurrentPage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
     </div>
   );
 }
-
-/* ------------------ Styles ------------------ */
-const styles = {
-  container: { maxWidth: "900px", margin: "auto", padding: "20px" },
-  topBar: { display: "flex", gap: "10px", marginBottom: "15px" },
-  form: { display: "grid", gap: "10px", marginBottom: "20px" },
-  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "15px" },
-  card: { border: "1px solid #ddd", padding: "15px", borderRadius: "8px" },
-  table: { width: "100%", borderCollapse: "collapse" },
-  pagination: { marginTop: "15px", display: "flex", gap: "8px" },
-};
 
 export default Products;
