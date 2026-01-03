@@ -1,4 +1,4 @@
-# Grey Scientific Labs Assessment
+# Grey Scientific Labs Assessment (Products View)
 
 This project was developed exclusively as part of the assessment provided by Grey Scientific Labs. It has been carefully prepared to meet the evaluation criteria mentioned in the assessment email.
 
